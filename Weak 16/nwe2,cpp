@@ -1,0 +1,74 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<pair<int, int>> adj_list[105];  
+long long int dis[105];  
+
+void dijkstra(int src) {
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    dis[src] = 0;
+    pq.push({0, src}); 
+
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        int d = pq.top().first;
+        pq.pop();
+
+        
+        if (d > dis[u]) 
+            continue;
+
+        
+        for (auto &neighbor : adj_list[u]) {
+            int v = neighbor.first;
+            int weight = neighbor.second;
+
+           
+            if (dis[u] + weight < dis[v]) {
+                dis[v] = dis[u] + weight;
+                pq.push({dis[v], v});
+            }
+        }
+    }
+}
+
+int main() {
+    int n, e;
+    cin >> n >> e;
+
+    
+    for (int i = 0; i < e; i++) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        adj_list[a].push_back({b, c});
+    }
+
+   
+    for (int i = 1; i <= n; i++) {
+        dis[i] = INT_MAX;
+    }
+
+    int q;
+    cin >> q;  
+
+    while (q--) {
+        int s, d;
+        cin >> s >> d;
+
+       
+        for (int i = 1; i <= n; i++) {
+            dis[i] = INT_MAX;
+        }
+
+        dijkstra(s);  
+
+       
+        if (dis[d] == INT_MAX) {
+            cout << -1 << endl;  
+        } else {
+            cout << dis[d] << endl;  
+        }
+    }
+
+  return 0;
+}
